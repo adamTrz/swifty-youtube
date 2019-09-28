@@ -32,6 +32,22 @@ extension UIColor {
     }
 }
 
+
+extension UIImageView {
+    func loadFromUrlString(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.image = image
+                    }
+                }
+            }
+        }
+    }
+}
+
 class BaseCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)

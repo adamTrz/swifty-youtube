@@ -9,29 +9,26 @@
 import UIKit
 
 struct Video {
-    var thumbnailImageName: String?
-//    var profileImageName: String?
+    var thumbnailImageUrl: String?
     var title: String?
-    var upladDate: Date?
     var numberOfViews: NSNumber?
     var channel: Channel?
     
-    init(thumbnail: String, title: String, channel: Channel, numberOfViews: NSNumber?, upladDate: Date?) {
-        self.thumbnailImageName = thumbnail
+    init(thumbnail: String?, title: String?, channel: Channel?, numberOfViews: NSNumber?) {
+        self.thumbnailImageUrl = thumbnail
         self.title = title
         self.channel = channel
         self.numberOfViews = numberOfViews
-        self.upladDate = upladDate
     }
 }
 
 struct Channel {
     var name: String?
-    var profileImageName: String?
+    var profileImageUrl: String?
     
-    init(name: String, profileImageName: String) {
+    init(name: String?, profileImageName: String?) {
         self.name = name
-        self.profileImageName = profileImageName
+        self.profileImageUrl = profileImageName
     }
     
 }

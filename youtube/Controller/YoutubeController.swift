@@ -12,25 +12,56 @@ class YoutubeController: UICollectionViewController {
 
     fileprivate let cellId = "cellId"
     
-    var videos: [Video] = {
-        var channel = Channel(name: "TaylorSwiftVEVO", profileImageName: "taylor_swift_profle")
-
-        var blankSpaceVideo = Video(thumbnail: "taylor_swift_blank_space", title: "Taylor Swift - Blank Space", channel: channel, numberOfViews: 2499721878, upladDate: Date())
-        //10 lis 2014"
-        var badBloodVideo = Video(thumbnail: "bad_blood", title: "Taylor Swift - Bad Blood featuring Kendrick Lamar", channel: channel, numberOfViews: 1316399408, upladDate: Date())
-        // 17 maj 2015
-        return [blankSpaceVideo, badBloodVideo]
-    }()
+    var videos = [Video]()
     
     override func viewDidLoad() {
-        setNeedsStatusBarAppearanceUpdate()
         super.viewDidLoad()
+        fetchVideos()
         collectionView.backgroundColor = UIColor.systemBackground
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.contentInset = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
         setupNavigationBar()
         setupMenuBar()
+    }
+    
+    var dataTask: URLSessionDataTask?
+
+    fileprivate func fetchVideos() {
+        dataTask?.cancel()
+        let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
+//        URLSession.dataTask(URLSession)
+        let session = URLSession(configuration: .default)
+        dataTask = session.dataTask(with: url!) { [weak self] data, response, error in
+            defer {
+                self?.dataTask = nil
+            }
+            if error != nil {
+                print(error!)
+                return
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
+                for item in json as! [[String: AnyObject]] {
+                    let video = Video(
+                        thumbnail: item["thumbnail_image_name"] as? String,
+                        title: item["title"] as? String,
+                        channel: Channel(
+                            name: item["channel"]?["name"] as? String,
+                            profileImageName: item["channel"]?["profile_image_name"] as? String
+                        ),
+                        numberOfViews: item["number_of_views"] as? NSNumber
+                    )
+                    self?.videos.append(video)
+                }
+                DispatchQueue.main.async {
+                    self?.collectionView.reloadData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+        dataTask!.resume()
     }
     
     let menuBar: MenuBar = {

@@ -12,12 +12,12 @@
 		6675D1BE233F4933001B698C /* YoutubeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6675D1BD233F4933001B698C /* YoutubeController.swift */; };
 		6675D1C3233F4935001B698C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6675D1C2233F4935001B698C /* Assets.xcassets */; };
 		6675D1C6233F4935001B698C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6675D1C4233F4935001B698C /* LaunchScreen.storyboard */; };
-		6675D1CE233F53F7001B698C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6675D1CD233F53F7001B698C /* Main.storyboard */; };
 		6675D1D1233F8066001B698C /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6675D1D0233F8066001B698C /* Extensions.swift */; };
 		6675D1D4233F80E8001B698C /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6675D1D3233F80E8001B698C /* VideoCell.swift */; };
 		6675D1D7233F8787001B698C /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6675D1D6233F8787001B698C /* MenuBar.swift */; };
 		66F7A3AF233F8AA100008948 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F7A3AE233F8AA100008948 /* Constants.swift */; };
 		66F7A3B2233FB7AD00008948 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F7A3B1233FB7AD00008948 /* Video.swift */; };
+		66F7A3B4233FF2BE00008948 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66F7A3B3233FF2BE00008948 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,12 +28,12 @@
 		6675D1C2233F4935001B698C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6675D1C5233F4935001B698C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6675D1C7233F4935001B698C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6675D1CD233F53F7001B698C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../../../../../.Trash/Main.storyboard; sourceTree = "<group>"; };
 		6675D1D0233F8066001B698C /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6675D1D3233F80E8001B698C /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		6675D1D6233F8787001B698C /* MenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
 		66F7A3AE233F8AA100008948 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		66F7A3B1233FB7AD00008948 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		66F7A3B3233FF2BE00008948 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +74,8 @@
 				6675D1BB233F4933001B698C /* SceneDelegate.swift */,
 				6675D1C2233F4935001B698C /* Assets.xcassets */,
 				6675D1C4233F4935001B698C /* LaunchScreen.storyboard */,
-				6675D1CD233F53F7001B698C /* Main.storyboard */,
 				6675D1C7233F4935001B698C /* Info.plist */,
+				66F7A3B3233FF2BE00008948 /* Main.storyboard */,
 			);
 			path = youtube;
 			sourceTree = "<group>";
@@ -172,7 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6675D1CE233F53F7001B698C /* Main.storyboard in Resources */,
+				66F7A3B4233FF2BE00008948 /* Main.storyboard in Resources */,
 				6675D1C6233F4935001B698C /* LaunchScreen.storyboard in Resources */,
 				6675D1C3233F4935001B698C /* Assets.xcassets in Resources */,
 			);
