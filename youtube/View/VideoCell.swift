@@ -36,15 +36,15 @@ class VideoCell: BaseCell {
         view.backgroundColor = .lightGray
         return view
     }()
-    let thumbnailImageView: UIImageView = {
-        let imageView = UIImageView()
+    let thumbnailImageView: NetworkImageView = {
+        let imageView = NetworkImageView()
         imageView.image = UIImage(named: "bad_blood")
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
+    let profileImageView: NetworkImageView = {
+        let imageView = NetworkImageView()
         imageView.image = UIImage(named: "taylor_swift_profle")
         imageView.layer.cornerRadius = 22
         imageView.layer.masksToBounds = true

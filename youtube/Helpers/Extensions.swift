@@ -32,17 +32,28 @@ extension UIColor {
     }
 }
 
+let imageCache = NSCache<NSString, UIImage>()
 
-extension UIImageView {
+class NetworkImageView: UIImageView {
+    
+    var imageUrl: String?
+    
     func loadFromUrlString(_ urlString: String) {
+        imageUrl = urlString
+        if let imageFromCache = imageCache.object(forKey: urlString as NSString) {
+            self.image = imageFromCache
+            return
+        }
         guard let url = URL(string: urlString) else { return }
         DispatchQueue.global().async { [weak self] in
             if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        self?.image = image
+                        let imageToCache = UIImage(data: data)
+                        if self?.imageUrl == urlString {
+                            self?.image = imageToCache
+                        }
+                        imageCache.setObject(imageToCache!, forKey: urlString as NSString)
                     }
-                }
             }
         }
     }
