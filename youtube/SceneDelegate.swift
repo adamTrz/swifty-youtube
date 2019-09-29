@@ -8,26 +8,28 @@
 
 import UIKit
 
+class CustomNavigationController: UINavigationController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+}
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
                 
         let layout = UICollectionViewFlowLayout()
-        let navController = UINavigationController(rootViewController: YoutubeController(collectionViewLayout: layout))
+        let navController = CustomNavigationController(rootViewController: YoutubeController(collectionViewLayout: layout))
         window?.rootViewController = navController
-//        let statusBarBGColor = UIView()
-        // TODO: - Draw fake StatusBar overlay
-//        statusBarBGColor.backgroundColor = UIColor.rgb(red: 194, green: 31, blue: 31)
-//        let statuBarHeight = windowScene.statusBarManager?.statusBarFrame.height ?? 20
-//        window?.addSubview(statusBarBGColor)
-//        window?.addConstraintsWithFormat("H:|[v0]|", views: statusBarBGColor)
-//        window?.addConstraintsWithFormat("V:|[v0(\(statuBarHeight))]|", views: statusBarBGColor)
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

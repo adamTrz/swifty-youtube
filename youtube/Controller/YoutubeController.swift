@@ -25,11 +25,6 @@ class YoutubeController: UICollectionViewController {
         setupMenuBar()
     }
 
-    // TODO: Investigate WTF?
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     var dataTask: URLSessionDataTask?
 
     fileprivate func fetchVideos() {
@@ -84,10 +79,10 @@ class YoutubeController: UICollectionViewController {
         titleLabel.text = "Home"
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 20)
+        navigationController?.hidesBarsOnSwipe = true
+//        navigationController.hide
         navigationItem.titleView = titleLabel
         navigationController?.navigationBar.isTranslucent = false
-        // TODO: Investigate WTF?
-        navigationController?.navigationBar.barStyle = .black
         navigationController?.navigationBar.barTintColor = barColor
         navigationController?.navigationBar.isTranslucent = false
         let searchBarButtonItem = makeBarButton(imageName: "search", selector: #selector(handleSearch), size: 24)
