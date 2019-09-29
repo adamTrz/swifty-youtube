@@ -30,7 +30,6 @@ class YoutubeController: UICollectionViewController {
     fileprivate func fetchVideos() {
         dataTask?.cancel()
         let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
-//        URLSession.dataTask(URLSession)
         let session = URLSession(configuration: .default)
         dataTask = session.dataTask(with: url!) { [weak self] data, response, error in
             defer {
@@ -87,9 +86,9 @@ class YoutubeController: UICollectionViewController {
         navigationController?.navigationBar.barTintColor = barColor
         navigationController?.navigationBar.isTranslucent = false
         let searchBarButtonItem = makeBarButton(imageName: "search", selector: #selector(handleSearch), size: 24)
-        let moreBarButtonItem = makeBarButton(imageName: "more_vert", selector: #selector(handleSearch), size: 24)
+        let moreBarButtonItem = makeBarButton(imageName: "more_vert", selector: #selector(handleMore), size: 24)
         navigationItem.rightBarButtonItems = [
-            searchBarButtonItem, moreBarButtonItem
+            moreBarButtonItem, searchBarButtonItem
         ]
     }
     
@@ -110,6 +109,12 @@ class YoutubeController: UICollectionViewController {
     
     @objc func handleSearch() {
         print("searchBarButtonItem")
+    }
+    
+    let settingsOverlay = SettingsOverlay()
+    
+    @objc func handleMore() {
+        settingsOverlay.showOverlay()
     }
     
     // TODO: Investigate WTF?
