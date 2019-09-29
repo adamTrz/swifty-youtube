@@ -24,6 +24,11 @@ class YoutubeController: UICollectionViewController {
         setupNavigationBar()
         setupMenuBar()
     }
+
+    // TODO: Investigate WTF?
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     
     var dataTask: URLSessionDataTask?
 
@@ -111,15 +116,30 @@ class YoutubeController: UICollectionViewController {
         print("searchBarButtonItem")
     }
     
-    let settingsOverlay = SettingsOverlay()
+    // Need to lazily create an instance of SettingsOverlay and pass self as a homeController
+    // This way, SettingsOverlay would have access to it and can call from itself
+    // `self.homeController?.showControllerForSetting()`
+    lazy var settingsOverlay: SettingsOverlay = {
+        let launcher = SettingsOverlay()
+        launcher.homeController = self
+        return launcher
+    }()
     
     @objc func handleMore() {
         settingsOverlay.showOverlay()
     }
     
-    // TODO: Investigate WTF?
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+    func showControllerForSetting(_ setting: Setting) {
+        let dummyVC = UIViewController()
+        dummyVC.navigationItem.title = setting.name.rawValue
+        dummyVC.view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white
+        ]
+        navigationController?.navigationBar.tintColor = .white
+//        navigationController?.navigationBar.backgroundColor = .systemBackground
+//        navigationController?.navigationBar.barTintColor = .systemBackground
+        navigationController?.pushViewController(dummyVC, animated: true)
     }
 }
 

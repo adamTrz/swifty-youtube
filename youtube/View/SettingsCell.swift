@@ -7,14 +7,13 @@
 //
 
 
-
 import UIKit
 
 class SettingsCell: BaseCell {
     
     var item: Setting? {
         didSet {
-            labelView.text = item?.name
+            labelView.text = item?.name.rawValue
             if let icon = item?.icon {
                 iconView.image = UIImage(named: icon)?.withRenderingMode(.alwaysTemplate)
                 iconView.tintColor = .label

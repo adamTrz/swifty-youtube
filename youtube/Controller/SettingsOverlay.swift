@@ -14,7 +14,7 @@ class SettingsOverlay: NSObject {
     fileprivate let cellHeight: CGFloat = 50
     let overlayView = UIView()
     
-    let collectionView: UICollectionView = {
+    let collectionView: UICollectionView = { 
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = UIColor.systemBackground
@@ -23,20 +23,22 @@ class SettingsOverlay: NSObject {
     }()
     
     let settings: [Setting] = {
-        let setting = Setting(name: "Settings", icon: "settings")
-        let account = Setting(name: "Switch Account", icon: "account")
-        let feedback = Setting(name: "Send Feedback", icon: "feedback")
-        let help = Setting(name: "Help", icon: "help")
-        let close = Setting(name: "Close", icon: "close")
-        let terms = Setting(name: "Terms & privacy policy", icon: "lock")
+        let setting = Setting(name: .Settings, icon: "settings")
+        let account = Setting(name: .Account, icon: "account")
+        let feedback = Setting(name: .Feedback, icon: "feedback")
+        let help = Setting(name: .Help, icon: "help")
+        let cancel = Setting(name: .Cancel, icon: "close")
+        let terms = Setting(name: .Terms, icon: "lock")
 
-        return [setting, terms, feedback, help, account, close]
+        return [setting, terms, feedback, help, account, cancel]
     }()
+    
+    var homeController: YoutubeController?
 
     func showOverlay() {
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             overlayView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            overlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+            overlayView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
             window.addSubview(overlayView)
             window.addSubview(collectionView)
             
@@ -55,7 +57,11 @@ class SettingsOverlay: NSObject {
         }
     }
     
-    @objc func handleDismiss() {
+    @objc func handleTap() {
+        handleDismiss()
+    }
+    
+    func handleDismiss(forSetting setting: Setting? = nil) {
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             UIView.animate(withDuration: 0.3, animations: {
                 self.overlayView.alpha = 0
@@ -63,6 +69,9 @@ class SettingsOverlay: NSObject {
             }) { (_) in
                 self.collectionView.removeFromSuperview()
                 self.overlayView.removeFromSuperview()
+                if let setting = setting, setting.name != .Cancel {
+                    self.homeController?.showControllerForSetting(setting)
+                }
             }
         }
     }
@@ -96,13 +105,9 @@ extension SettingsOverlay: UICollectionViewDelegateFlowLayout, UICollectionViewD
         return 0
     }
     
-}
-
-struct Setting {
-    let name: String
-    let icon: String
-    init(name: String, icon: String) {
-        self.name = name
-        self.icon = icon
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let setting = settings[indexPath.item]
+        handleDismiss(forSetting: setting)
     }
+    
 }
