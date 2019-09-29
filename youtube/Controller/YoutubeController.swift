@@ -25,42 +25,11 @@ class YoutubeController: UICollectionViewController {
         setupMenuBar()
     }
 
-    var dataTask: URLSessionDataTask?
-
     fileprivate func fetchVideos() {
-        dataTask?.cancel()
-        let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
-        let session = URLSession(configuration: .default)
-        dataTask = session.dataTask(with: url!) { [weak self] data, response, error in
-            defer {
-                self?.dataTask = nil
-            }
-            if error != nil {
-                print(error!)
-                return
-            }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers)
-                for item in json as! [[String: AnyObject]] {
-                    let video = Video(
-                        thumbnail: item["thumbnail_image_name"] as? String,
-                        title: item["title"] as? String,
-                        channel: Channel(
-                            name: item["channel"]?["name"] as? String,
-                            profileImageName: item["channel"]?["profile_image_name"] as? String
-                        ),
-                        numberOfViews: item["number_of_views"] as? NSNumber
-                    )
-                    self?.videos.append(video)
-                }
-                DispatchQueue.main.async {
-                    self?.collectionView.reloadData()
-                }
-            } catch {
-                print(error)
-            }
+        ApiService.sharedInstance.fetchVideos { (videos: [Video]) in
+            self.videos = videos
+            self.collectionView.reloadData()
         }
-        dataTask!.resume()
     }
     
     let menuBar: MenuBar = {
