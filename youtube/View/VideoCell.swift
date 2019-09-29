@@ -26,7 +26,7 @@ class VideoCell: BaseCell {
             if let numberOfViews = video?.numberOfViews,
 //                let date = video?.upladDate,
                 let channelName = video?.channel?.name {
-                subtitleTextView.text = "\(channelName) • 2 motnhs ago • \(numberFormatter.string(from: numberOfViews)!) views"
+                subtitleTextView.text = "\(channelName) • 2 months ago • \(numberFormatter.string(from: numberOfViews)!) views"
             }
         }
     }
@@ -53,7 +53,7 @@ class VideoCell: BaseCell {
     }()
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0 // TODO: Nott working...
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         return label
