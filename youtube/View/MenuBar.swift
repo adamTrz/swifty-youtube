@@ -30,9 +30,22 @@ class MenuBar: UIView {
         addConstraintsWithFormat("V:|[v0]|", views: collectionView)
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .bottom)
+        setupBarIndicator()
     }
     
+    var barIndicatorLeftAnchorConstraint: NSLayoutConstraint?
     
+    func setupBarIndicator() {
+        let indicator = UIView()
+        indicator.backgroundColor = .white
+        addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        barIndicatorLeftAnchorConstraint = indicator.leftAnchor.constraint(equalTo: self.leftAnchor)
+        barIndicatorLeftAnchorConstraint?.isActive = true
+        indicator.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        indicator.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/4).isActive = true
+        indicator.heightAnchor.constraint(equalToConstant: 4).isActive = true
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -59,35 +72,14 @@ extension MenuBar: UICollectionViewDataSource, UICollectionViewDelegate, UIColle
         return CGSize(width: frame.width / 4, height: frame.height)
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let x = CGFloat(indexPath.item) * frame.width / 4
+        self.barIndicatorLeftAnchorConstraint?.constant = x
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
+        }
+    }
+    
 }
 
 
-class MenuCell: BaseCell {
-    
-    let imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage().withRenderingMode(.alwaysTemplate)
-        iv.tintColor = darkRed
-        return iv
-    }()
-    
-    override var isSelected: Bool {
-        didSet {
-            imageView.tintColor = isSelected ? .white : darkRed
-        }
-    }
-    override var isHighlighted: Bool {
-        didSet {
-            imageView.tintColor = isHighlighted ? .white : darkRed
-        }
-    }
-
-    override func setupViews(){
-        super.setupViews()
-        addSubview(imageView)
-        addConstraintsWithFormat("H:[v0(28)]", views: imageView)
-        addConstraintsWithFormat("V:[v0(28)]", views: imageView)
-        addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
-        addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
-    }
-}

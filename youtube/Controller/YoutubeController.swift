@@ -16,11 +16,11 @@ class YoutubeController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchVideos()
         collectionView.backgroundColor = UIColor.systemBackground
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.contentInset = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
+        fetchVideos()
         setupNavigationBar()
         setupMenuBar()
     }
@@ -69,9 +69,17 @@ class YoutubeController: UICollectionViewController {
     }()
     
     private func setupMenuBar(){
+        
+        let navBarUnderlay = UIView()
+        navBarUnderlay.backgroundColor = barColor
+        view.addSubview(navBarUnderlay)
+        view.addConstraintsWithFormat("H:|[v0]|", views: navBarUnderlay)
+        view.addConstraintsWithFormat("V:[v0(50)]", views: navBarUnderlay)
+        
         view.addSubview(menuBar)
         view.addConstraintsWithFormat("H:|[v0]|", views: menuBar)
-        view.addConstraintsWithFormat("V:|[v0(\(menuBarHeight))]|", views: menuBar)
+        view.addConstraintsWithFormat("V:[v0(\(menuBarHeight))]", views: menuBar)
+        menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
     }
     
     fileprivate func setupNavigationBar() {
@@ -79,10 +87,8 @@ class YoutubeController: UICollectionViewController {
         titleLabel.text = "Home"
         titleLabel.textColor = .white
         titleLabel.font = UIFont.systemFont(ofSize: 20)
-        navigationController?.hidesBarsOnSwipe = true
-//        navigationController.hide
         navigationItem.titleView = titleLabel
-        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.hidesBarsOnSwipe = true
         navigationController?.navigationBar.barTintColor = barColor
         navigationController?.navigationBar.isTranslucent = false
         let searchBarButtonItem = makeBarButton(imageName: "search", selector: #selector(handleSearch), size: 24)
