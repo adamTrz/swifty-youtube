@@ -23,8 +23,13 @@ class YoutubeController: UICollectionViewController {
     }
 
     fileprivate func setupCollectionView() {
+        if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            flowLayout.scrollDirection = .horizontal
+        }
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = UIColor.systemBackground
-        collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.isPagingEnabled = true
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.contentInset = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
     }
@@ -36,13 +41,14 @@ class YoutubeController: UICollectionViewController {
         }
     }
     
-    let menuBar: MenuBar = {
+    lazy var menuBar: MenuBar = {
         let menu = MenuBar()
+        // Assign self as a MenuBars homeController so it can call our internal methods e.g. scrollToItemAtIndex(index)
+        menu.homeController = self
         return menu
     }()
     
     private func setupMenuBar(){
-        
         let navBarUnderlay = UIView()
         navBarUnderlay.backgroundColor = .systemBackground
         view.addSubview(navBarUnderlay)
@@ -55,11 +61,20 @@ class YoutubeController: UICollectionViewController {
         menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
     }
     
+    func scrollToItemAtIndex(index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
+    }
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
+        label.text = "Home"
+        label.textColor = .label
+        label.font = UIFont.systemFont(ofSize: 20)
+        return label
+    }()
+    
     fileprivate func setupNavigationBar() {
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
-        titleLabel.text = "Home"
-        titleLabel.textColor = .label
-        titleLabel.font = UIFont.systemFont(ofSize: 20)
         navigationItem.titleView = titleLabel
         navigationController?.hidesBarsOnSwipe = true
         navigationController?.navigationBar.isTranslucent = false
@@ -114,22 +129,35 @@ class YoutubeController: UICollectionViewController {
 extension YoutubeController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return videos.count
+        return tabs.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! VideoCell
-        cell.video = videos[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let colors: [UIColor] = [.cyan, .magenta, .yellow, .black]
+        cell.backgroundColor = colors[indexPath.item]
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.frame.width
-        let height = (width - 16 - 16) * 9 / 16
-        return CGSize(width: width, height: height + 16 + 8 + 64 + 16)
+         return CGSize(width: view.frame.width, height: view.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
 
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        menuBar.barIndicatorLeftAnchorConstraint?.constant = scrollView.contentOffset.x / CGFloat(tabs.count)
+    }
+    
+    // On end of the scroll get index of target screen and then select apropriate index to MenuBar to select its cell. Also, change navigation bar title
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = Int(targetContentOffset.pointee.x / view.frame.width)
+        let indexPath = IndexPath(item: index, section: 0)
+        menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .left)
+        let viewTitle = tabs[index].name
+        titleLabel.text = viewTitle
+    }
+    
 }

@@ -8,10 +8,14 @@
 
 import UIKit
 
-let barColor = UIColor.rgb(red: 230, green: 32, blue: 31)
-//let barColor = UIColor.systemRed
-let darkRed = UIColor.rgb(red: 91, green: 14, blue: 13)
+let themeRed = UIColor.rgb(red: 230, green: 32, blue: 31)
 
+let tabs: [Tab] = [
+    Tab(name: "Home", icon: "home"),
+    Tab(name: "Trendnig", icon: "whatshot"),
+    Tab(name: "Subscriptions", icon: "subscriptions"),
+    Tab(name: "Accounts", icon: "accounts"),
+]
 
 
 let menuBarHeight = CGFloat(50)

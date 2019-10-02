@@ -19,12 +19,12 @@ class MenuCell: BaseCell {
     
     override var isSelected: Bool {
         didSet {
-            imageView.tintColor = isSelected ? barColor : .label
+            imageView.tintColor = isSelected ? themeRed : .label
         }
     }
     override var isHighlighted: Bool {
         didSet {
-            imageView.tintColor = isHighlighted ? barColor : .label
+            imageView.tintColor = isHighlighted ? themeRed : .label
         }
     }
 

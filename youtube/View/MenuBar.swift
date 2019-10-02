@@ -9,7 +9,6 @@
 import UIKit
 
 fileprivate let cellId = "menuCell"
-fileprivate let tabs = ["home", "whatshot", "subscriptions", "accounts"]
 
 class MenuBar: UIView {
         
@@ -17,10 +16,6 @@ class MenuBar: UIView {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .systemBackground
-//        cv.layer.shadowColor = UIColor.label.cgColor
-//        cv.layer.shadowOpacity = 1
-//        cv.layer.shadowOffset = .zero
-//        cv.layer.shadowRadius = 10
         cv.dataSource = self
         cv.delegate = self
         return cv
@@ -38,10 +33,11 @@ class MenuBar: UIView {
     }
     
     var barIndicatorLeftAnchorConstraint: NSLayoutConstraint?
+    var homeController: YoutubeController?
     
     func setupBarIndicator() {
         let indicator = UIView()
-        indicator.backgroundColor = barColor
+        indicator.backgroundColor = themeRed
         addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         barIndicatorLeftAnchorConstraint = indicator.leftAnchor.constraint(equalTo: self.leftAnchor)
@@ -63,7 +59,7 @@ extension MenuBar: UICollectionViewDataSource, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
-        cell.imageView.image = UIImage(named: tabs[indexPath.row])?.withRenderingMode(.alwaysTemplate)
+        cell.imageView.image = UIImage(named: tabs[indexPath.row].icon)?.withRenderingMode(.alwaysTemplate)
         cell.tintColor = .label
         return cell
     }
@@ -77,8 +73,7 @@ extension MenuBar: UICollectionViewDataSource, UICollectionViewDelegate, UIColle
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let x = CGFloat(indexPath.item) * frame.width / 4
-        self.barIndicatorLeftAnchorConstraint?.constant = x
+        homeController?.scrollToItemAtIndex(index: indexPath.item)
         UIView.animate(withDuration: 0.3) {
             self.layoutIfNeeded()
         }
