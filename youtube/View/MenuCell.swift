@@ -13,18 +13,18 @@ class MenuCell: BaseCell {
     let imageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage().withRenderingMode(.alwaysTemplate)
-        iv.tintColor = darkRed
+        iv.tintColor = .label
         return iv
     }()
     
     override var isSelected: Bool {
         didSet {
-            imageView.tintColor = isSelected ? .white : darkRed
+            imageView.tintColor = isSelected ? barColor : .label
         }
     }
     override var isHighlighted: Bool {
         didSet {
-            imageView.tintColor = isHighlighted ? .white : darkRed
+            imageView.tintColor = isHighlighted ? barColor : .label
         }
     }
 

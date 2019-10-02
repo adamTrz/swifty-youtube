@@ -16,7 +16,11 @@ class MenuBar: UIView {
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = barColor
+        cv.backgroundColor = .systemBackground
+//        cv.layer.shadowColor = UIColor.label.cgColor
+//        cv.layer.shadowOpacity = 1
+//        cv.layer.shadowOffset = .zero
+//        cv.layer.shadowRadius = 10
         cv.dataSource = self
         cv.delegate = self
         return cv
@@ -37,7 +41,7 @@ class MenuBar: UIView {
     
     func setupBarIndicator() {
         let indicator = UIView()
-        indicator.backgroundColor = .white
+        indicator.backgroundColor = barColor
         addSubview(indicator)
         indicator.translatesAutoresizingMaskIntoConstraints = false
         barIndicatorLeftAnchorConstraint = indicator.leftAnchor.constraint(equalTo: self.leftAnchor)
@@ -60,7 +64,7 @@ extension MenuBar: UICollectionViewDataSource, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
         cell.imageView.image = UIImage(named: tabs[indexPath.row])?.withRenderingMode(.alwaysTemplate)
-        cell.tintColor = darkRed
+        cell.tintColor = .label
         return cell
     }
     

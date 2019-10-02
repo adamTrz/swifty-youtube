@@ -16,13 +16,17 @@ class YoutubeController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCollectionView()
+        fetchVideos()
+        setupNavigationBar()
+        setupMenuBar()
+    }
+
+    fileprivate func setupCollectionView() {
         collectionView.backgroundColor = UIColor.systemBackground
         collectionView.register(VideoCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.contentInset = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
-        fetchVideos()
-        setupNavigationBar()
-        setupMenuBar()
     }
 
     fileprivate func fetchVideos() {
@@ -40,7 +44,7 @@ class YoutubeController: UICollectionViewController {
     private func setupMenuBar(){
         
         let navBarUnderlay = UIView()
-        navBarUnderlay.backgroundColor = barColor
+        navBarUnderlay.backgroundColor = .systemBackground
         view.addSubview(navBarUnderlay)
         view.addConstraintsWithFormat("H:|[v0]|", views: navBarUnderlay)
         view.addConstraintsWithFormat("V:[v0(50)]", views: navBarUnderlay)
@@ -54,11 +58,10 @@ class YoutubeController: UICollectionViewController {
     fileprivate func setupNavigationBar() {
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
         titleLabel.text = "Home"
-        titleLabel.textColor = .white
+        titleLabel.textColor = .label
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         navigationItem.titleView = titleLabel
         navigationController?.hidesBarsOnSwipe = true
-        navigationController?.navigationBar.barTintColor = barColor
         navigationController?.navigationBar.isTranslucent = false
         let searchBarButtonItem = makeBarButton(imageName: "search", selector: #selector(handleSearch), size: 24)
         let moreBarButtonItem = makeBarButton(imageName: "more_vert", selector: #selector(handleMore), size: 24)
@@ -70,7 +73,7 @@ class YoutubeController: UICollectionViewController {
     fileprivate func makeBarButton(imageName: String, selector: Selector, size: CGFloat) -> UIBarButtonItem {
         let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
         let button = UIButton(type: .custom)
-        button.tintColor = .white
+        button.tintColor = .label
         button.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         button.setImage(image, for: .normal)
         button.addTarget(self, action: selector, for: .touchUpInside)
@@ -103,12 +106,6 @@ class YoutubeController: UICollectionViewController {
         let dummyVC = UIViewController()
         dummyVC.navigationItem.title = setting.name.rawValue
         dummyVC.view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white
-        ]
-        navigationController?.navigationBar.tintColor = .white
-//        navigationController?.navigationBar.backgroundColor = .systemBackground
-//        navigationController?.navigationBar.barTintColor = .systemBackground
         navigationController?.pushViewController(dummyVC, animated: true)
     }
 }

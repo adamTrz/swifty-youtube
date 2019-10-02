@@ -33,7 +33,7 @@ class VideoCell: BaseCell {
     
     let separator: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .separator
         return view
     }()
     let thumbnailImageView: NetworkImageView = {

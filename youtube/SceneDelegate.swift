@@ -17,7 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-//        UIApplication.shared.colo
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
@@ -26,15 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navController = UINavigationController(
             rootViewController: YoutubeController(collectionViewLayout: layout)
         )
-        UINavigationBar.appearance().barTintColor = barColor
             
         window?.rootViewController = navController
-        let statusBarBGColor = UIView()
-        statusBarBGColor.backgroundColor = UIColor.rgb(red: 194, green: 31, blue: 31)
-        let statuBarHeight = windowScene.statusBarManager?.statusBarFrame.height ?? 20
-        window?.addSubview(statusBarBGColor)
-        window?.addConstraintsWithFormat("H:|[v0]|", views: statusBarBGColor)
-        window?.addConstraintsWithFormat("V:|[v0(\(statuBarHeight))]|", views: statusBarBGColor)
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
