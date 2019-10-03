@@ -11,13 +11,13 @@ import UIKit
 class YoutubeController: UICollectionViewController {
 
     fileprivate let cellId = "cellId"
-    
-    var videos = [Video]()
-    
+    fileprivate let trendingCellId = "trendingCellId"
+    fileprivate let subscriptionsCellId = "subscriptionsCellId"
+    fileprivate let homeCellId = "homeCellId"
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        fetchVideos()
         setupNavigationBar()
         setupMenuBar()
     }
@@ -26,19 +26,15 @@ class YoutubeController: UICollectionViewController {
         if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             flowLayout.scrollDirection = .horizontal
         }
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = UIColor.systemBackground
-        collectionView.isPagingEnabled = true
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.contentInset = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: menuBarHeight, left: 0, bottom: 0, right: 0)
-    }
-
-    fileprivate func fetchVideos() {
-        ApiService.sharedInstance.fetchVideos { (videos: [Video]) in
-            self.videos = videos
-            self.collectionView.reloadData()
-        }
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .systemBackground
+        collectionView.isPagingEnabled = true
+        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(TrendingCell.self, forCellWithReuseIdentifier: trendingCellId)
+        collectionView.register(SubscriptionsCell.self, forCellWithReuseIdentifier: subscriptionsCellId)
+        collectionView.register(HomeCell.self, forCellWithReuseIdentifier: homeCellId)
     }
     
     lazy var menuBar: MenuBar = {
@@ -64,17 +60,21 @@ class YoutubeController: UICollectionViewController {
     func scrollToItemAtIndex(index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .left, animated: true)
+        setTitleForIndex(index)
     }
-    
-    lazy var titleLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
-        label.text = "Home"
-        label.textColor = .label
-        label.font = UIFont.systemFont(ofSize: 20)
-        return label
-    }()
-    
+
+    fileprivate func setTitleForIndex(_ index: Int) {
+        if let titleLabel = navigationItem.titleView as? UILabel {
+            titleLabel.text = "  \(tabs[index].name)"
+        }
+    }
+
     fileprivate func setupNavigationBar() {
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 32, height: view.frame.height))
+        titleLabel.text = "  Home"
+        titleLabel.textColor = .label
+        titleLabel.font = UIFont.systemFont(ofSize: 20)
+
         navigationItem.titleView = titleLabel
         navigationController?.hidesBarsOnSwipe = true
         navigationController?.navigationBar.isTranslucent = false
@@ -133,14 +133,22 @@ extension YoutubeController: UICollectionViewDelegateFlowLayout {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        let colors: [UIColor] = [.cyan, .magenta, .yellow, .black]
-        cell.backgroundColor = colors[indexPath.item]
-        return cell
+        let identifier: String
+        if indexPath.item == 1 {
+            identifier = trendingCellId
+        } else if indexPath.item == 2 {
+            identifier = subscriptionsCellId
+        } else if indexPath.item == 3 {
+            identifier = homeCellId
+        } else {
+            identifier = cellId
+        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-         return CGSize(width: view.frame.width, height: view.frame.height)
+         return CGSize(width: view.frame.width, height: view.frame.height )
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -156,8 +164,8 @@ extension YoutubeController: UICollectionViewDelegateFlowLayout {
         let index = Int(targetContentOffset.pointee.x / view.frame.width)
         let indexPath = IndexPath(item: index, section: 0)
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .left)
-        let viewTitle = tabs[index].name
-        titleLabel.text = viewTitle
+        setTitleForIndex(index)
+
     }
     
 }

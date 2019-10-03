@@ -14,9 +14,8 @@ class ApiService: NSObject {
     
     var dataTask: URLSessionDataTask?
 
-    func fetchVideos(completion: @escaping([Video]) -> ()) {
-        dataTask?.cancel()
-        let url = URL(string: "https://s3-us-west-2.amazonaws.com/youtubeassets/home.json")
+    func fetchVideos(url: String, completion: @escaping([Video]) -> ()) {
+        let url = URL(string: url)
         let session = URLSession(configuration: .default)
         dataTask = session.dataTask(with: url!) { [weak self] data, response, error in
             defer {
@@ -42,7 +41,6 @@ class ApiService: NSObject {
                     videos.append(video)
                 }
                 DispatchQueue.main.async {
-//                    self?.collectionView.reloadData()
                     completion(videos)
                 }
             } catch {
@@ -50,7 +48,6 @@ class ApiService: NSObject {
             }
         }
         dataTask!.resume()
-
     }
     
 }
